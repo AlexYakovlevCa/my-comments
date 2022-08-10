@@ -1,3 +1,6 @@
 <section class="user-select">
-    <select name="" id=""></select>
+    <select *ngIf="userList" (change)="onSelectUser($event)"  name="" id="">
+        <option value=""  [selected]="!selectedUser.id">Select User</option>
+        <option *ngFor="let user of userList; trackBy:identify" [value]="user.id">{{user.displayName}}</option>
+    </select>
 </section>
