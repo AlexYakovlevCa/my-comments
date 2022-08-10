@@ -1,7 +1,7 @@
 {
   "projectType": "application",
   "sourceRoot": "apps/my-app/src",
-  "prefix": "alexyakovlev",
+  "prefix": "app",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
