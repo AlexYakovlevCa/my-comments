@@ -1,1 +1,25 @@
-<p>chat-preview works!</p>
+<section class="comment-preview-tree">
+    <div class="comment-preview"  >
+
+        <div class="user-img" [ngClass]="{highlight:loggedInUserId===comment.ownerId}">
+            <img [src]="'../../assets/user-imgs/'+ comment.ownerId+'.jpg'">
+        </div>
+
+        <div class="user-data">
+            <span class="user-nickName">{{ownerDisplayeyName}}</span>
+            <span class="comment-created-at">{{comment.createdAt|date}}</span>
+        </div>
+        <a (click)="addComment.emit(comment)" class="add-comment"></a>
+
+        <div class="comment-txt">{{comment.txt}}</div>
+            <div *ngIf="comment.ownerId===loggedInUserId" class="contorller-btns">
+                <button (click)="deleteUser.emit(loggedInUserId)" >Delete User</button>
+                <button (click)="deleteComment.emit(comment.id)" >Delete Comment</button>
+                <!-- <button (click)="editComment.emit(comment.id)">Edit Comment</button> -->
+            </div>
+    </div>
+    <ng-container *ngIf="comments">
+        <comment-preview *ngFor="let comment of comments "  (deleteUser)="deleteUser.emit(loggedInUserId)"  (deleteComment)="deleteComment.emit(comment.id)"  [spacingLeft]="spacingLeft+10"    [comment]="comment">
+        </comment-preview>
+    </ng-container>
+</section>

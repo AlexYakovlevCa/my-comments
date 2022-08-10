@@ -7,7 +7,7 @@ import { UsersService } from '../../services/users/users.service'
   selector: 'user-select',
   templateUrl: './user-select.component.html',
   styleUrls: ['./user-select.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserSelectComponent implements OnInit, OnDestroy {
   constructor(private usersService: UsersService) { }
@@ -19,19 +19,18 @@ export class UserSelectComponent implements OnInit, OnDestroy {
     this.usersService.loadUsers()
     this.UsersSub = this.usersService.users$.subscribe(users => this.userList = users)
     this.loggedInUserSub = this.usersService.loggedInUser$.subscribe(user => this.selectedUser = user)
-    console.log('heyyy')
-
+    console.log('renders')
   }
   onSelectUser({ target }: Event) {
-    this.usersService.setSelectedUser(+(<HTMLSelectElement>target).value)
-
+    const value =+(<HTMLSelectElement>target).value
+    this.usersService.setSelectedUser(value)
+    
   }
   ngOnDestroy(): void {
     this.loggedInUserSub.unsubscribe()
     this.UsersSub.unsubscribe()
   }
   identify(item: any) {
-    console.log(item.label)
     return item.label
   }
 }

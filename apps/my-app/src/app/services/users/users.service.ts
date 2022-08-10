@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 import { User } from '../../models/interfaces'
 import baseUsers from '../../../assets/user-data/users.json'
+import { Subject } from 'rxjs'
 @Injectable({
   providedIn: 'root'
 })
@@ -14,15 +15,18 @@ export class UsersService {
   private _users$ = new BehaviorSubject<User[]>([])
   public users$ = this._users$.asObservable()
 
-  private _loggedInUser$ = new BehaviorSubject<User>({} as User)
+  private _loggedInUser$ = new Subject<User>()
   public loggedInUser$ = this._loggedInUser$.asObservable()
 
 
-
+  get getLoggedInUser (){
+    return this.loadLoggedInUserFromStorage()
+  }   
 
   public loadLoggedInUser() {
     const user = this.loadLoggedInUserFromStorage()
     if (user) this._loggedInUser$.next(user)
+    else this._loggedInUser$.next({} as User)
   }
 
   public loadUsers() {
@@ -36,13 +40,15 @@ export class UsersService {
     const users = this.loadUsers()
     const idx = users.findIndex((user) => user.id === userId)
     if (idx !== -1) {
-      if (this._loggedInUser$.value.id === userId) localStorage.removeItem(this.LOGGED_USER_KEY)
+      localStorage.removeItem(this.LOGGED_USER_KEY)
       users.splice(idx, 1)
-      this.updateUsers(users)
+      this.setSelectedUser(null)
+      this.updateUsers([...users])
     }
   }
 
-  public async setSelectedUser(userId: number) {
+  public async setSelectedUser(userId: number|null) {
+    if(userId === null) return this._loggedInUser$.next({}as User)
     const users = this.loadUsers()
     const user = users.find(currUser => currUser.id === userId)
     if (user) {
@@ -56,7 +62,7 @@ export class UsersService {
 
   public updateUsers(users: User[]) {
     localStorage.setItem(this.USERS_KEY, JSON.stringify(users))
-    this._users$.next(users)
+    this._users$.next([...users])
   }
 
   private loadUsersFromStorage() {
@@ -67,6 +73,12 @@ export class UsersService {
   private loadLoggedInUserFromStorage(): User {
     const user = JSON.parse(localStorage.getItem(this.LOGGED_USER_KEY) || '{}')
     return (Object.keys(user).length > 0) ? user : null
+  }
+  public getUserNameById(userId:number){
+    const user = this.loadUsers().find(user => user.id === userId)
+    // console.log(user?.displayName)
+    return user?.displayName || 'no such user'
+    
   }
 
   /* ***************************************************
