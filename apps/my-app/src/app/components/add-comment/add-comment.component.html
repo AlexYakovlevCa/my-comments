@@ -1,8 +1,7 @@
-<form  [formGroup]="addCommentForm" action="">
-    <!-- {{loggedInUser?.id|json}} -->
+<form  class="add-comment-form" (ngSubmit)="submitComment($event)" [formGroup]="addCommentForm" action="">
     <div class="user-img">
         <img [src]="'../../assets/user-imgs/'+ loggedInUserId+'.jpg'" alt="">
     </div>
-    <input type="text" placeholder="Write your comments" formControlName="txt">
-    <button>Submit comment</button>
+    <textarea type="text" placeholder="Write your comments" formControlName="txt"></textarea>
+    <button></button>
 </form>

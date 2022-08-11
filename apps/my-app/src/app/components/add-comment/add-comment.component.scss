@@ -1,0 +1,62 @@
+// <form  class="add-comment-form" (ngSubmit)="submitComment()" [formGroup]="addCommentForm" action="">
+//     <!-- {{loggedInUser?.id|json}} -->
+//     <div class="user-img">
+//         <img [src]="'../../assets/user-imgs/'+ loggedInUserId+'.jpg'" alt="">
+//     </div>
+//     <input type="text" placeholder="Write your comments" formControlName="txt">
+//     <button>Submit comment</button>
+// </form>
+
+.add-comment-form {
+    background-color: var(--third);
+    display: flex;
+    padding: 1em;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+
+    & .user-img {
+        height: 50px;
+        width: 50px;
+        // overflow: hidden;
+        // position: relative;
+        // right: 1.5em;
+
+        & img {
+            border-radius: 50%;
+            // border: 1px solid black;
+            // height: 100%;
+            width: 50px;
+            object-fit: cover;
+
+            aspect-ratio: 1/1;
+
+        }
+    }
+
+    & textarea {
+        padding: .6em;
+        border: unset;
+        box-shadow: 0 0 1.5px;
+        // border: 2px solid black;
+        border-radius: 1em;
+        background-color: var(--main);
+        height: 50px;
+    }
+
+    & button {
+        border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+        border: none;
+        box-shadow: 0 0 1.5px;
+        background-image: url(../../../assets/comment.png);
+        background-position: center;
+        background-size: 70%;
+        background-repeat: no-repeat;
+        &:hover{
+            background-color: whitesmoke;
+            outline: 1px solid var(--main);
+        }
+    }
+}

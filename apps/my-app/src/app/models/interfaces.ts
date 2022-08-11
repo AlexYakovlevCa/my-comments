@@ -4,8 +4,8 @@ export interface User {
     displayName: string;
 }
 export interface Comment{
-    id: number
-    parentCommentId?: number
+    id?: number
+    parentCommentId?: number | null
     ownerId: number
     txt: string
     createdAt: (number | Date)

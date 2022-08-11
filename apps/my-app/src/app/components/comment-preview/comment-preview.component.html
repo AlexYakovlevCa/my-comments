@@ -9,21 +9,26 @@
             <span class="user-nickName">{{ownerDisplayeyName}}</span>
             <span class="comment-created-at">{{comment.createdAt|date}}</span>
         </div>
-        <a class="on add comment" (click)="onSelectComment.emit(comment.id)" class="add-comment">add a Comment</a>
+        <a class="on add comment" (click)="selectComment(comment.id!,false)" class="add-comment">add a Comment</a>
 
         <div class="comment-txt">{{comment.txt}}</div>
         <div *ngIf="comment.ownerId===loggedInUserId" class="contorller-btns">
             <button (click)="deleteUser.emit(loggedInUserId)">Delete User</button>
             <button (click)="deleteComment.emit(comment.id)">Delete Comment</button>
-            <!-- <button (click)="editComment.emit(comment.id)">Edit Comment</button> -->
+            <button (click)="selectComment(comment.id!,true)">Edit Comment</button>
         </div>
     </div>
-    <add-comment *ngIf="comment.id===selectedCommentId" [loggedInUserId]="loggedInUserId"></add-comment>
+
+
+    <add-comment *ngIf="comment.id===selectedCommentId" (addComment)="addComment.emit($event)"
+        [loggedInUserId]="loggedInUserId" [selectedCommentId]="selectedCommentId" [isEdit]="isEdit"></add-comment>
+
     <ng-container *ngIf="comments">
-        <comment-preview *ngFor="let item of comments " 
-            (onSelectComment)=" onSelectComment.emit($event)"
-            [selectedCommentId]="selectedCommentId" 
+        <comment-preview *ngFor="let item of comments "
+            [loggedInUserId]="loggedInUserId"
+            (onSelectComment)=" onSelectComment.emit($event)" 
             (deleteUser)="deleteUser.emit($event)"
+            (addComment)="addComment.emit($event)"
             (deleteComment)="deleteComment.emit($event)" 
             [spacingLeft]="spacingLeft+10" [comment]="item">
         </comment-preview>

@@ -1,3 +1,9 @@
 <app-header></app-header>
-<comment-list></comment-list>
+<comment-list 
+        (deleteUser)="onDeleteUser($event)" 
+        (deleteComment)="onDeleteComment($event)" 
+        (addComment)="onSaveComment($event)" 
+        [comments]="comments"
+        [loggedInUser]="loggedInUser"
+></comment-list>
 <app-footer></app-footer>

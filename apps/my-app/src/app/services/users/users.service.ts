@@ -25,7 +25,8 @@ export class UsersService {
 
   public loadLoggedInUser() {
     const user = this.loadLoggedInUserFromStorage()
-    if (user) this._loggedInUser$.next(user)
+    console.log(user)
+    if (user) this._loggedInUser$.next({...user})
     else this._loggedInUser$.next({} as User)
   }
 
@@ -53,7 +54,7 @@ export class UsersService {
     const user = users.find(currUser => currUser.id === userId)
     if (user) {
       localStorage.setItem(this.LOGGED_USER_KEY, JSON.stringify(user))
-      this._loggedInUser$.next(user!)
+      this._loggedInUser$.next(user)
     }
     else {
       console.log('no logged in user')

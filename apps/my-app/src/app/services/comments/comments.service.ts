@@ -21,7 +21,6 @@ export class CommentsService {
     return comments
   }
 
-
   getCommentsByParentId(commentId: number): Comment[] {
     const comments = this.loadComments()
     return comments.filter(comment => comment.parentCommentId === commentId)
@@ -33,13 +32,12 @@ export class CommentsService {
     return comments.find(comment => comment.id === commentId)
 
   }
-  deleteComments(userId: number) {
-    console.log('delete @@@@@@@@@@@@@@@', userId)
+
+  deleteUserComments(userId: number) {
 
     const comments = this.loadComments()
-    console.log(comments)
     const comentsToDelete = comments.filter(comment => comment.ownerId === userId)
-    comentsToDelete.forEach(comment => this.deleteComment(comment.id))
+    comentsToDelete.forEach(comment => this.deleteComment(comment.id!))
     // this.updateComments(comentsToDelete)
     this.usersService.deleteUser(userId)
 
@@ -50,61 +48,46 @@ export class CommentsService {
     const comments = this.loadComments()
 
     const idx = comments.findIndex(comment => comment.id === commentId)
-
     comments.splice(idx, 1)
-    console.log(comments.length)
+    // const isDeleteUser = comments.some(comment => comment.ownerId !== comments[idx].ownerId)
+    // if (isDeleteUser) this.usersService.deleteUser(comments[idx].ownerId)
     localStorage.setItem(this.COMMENTS_KEY, JSON.stringify(comments))
 
     comments.forEach(comment => {
       if (comment.parentCommentId === commentId) {
-        this.deleteComment(comment.id)
+        this.deleteComment(comment.id!)
       }
 
     })
-    // console.log(comments.length)
-    console.log('times')
-    // this.updateComments(comments)
 
   }
-  /* 
-  ***************************************************
-  1 1 2
- 1 1 3
- 3 3 4
- 4 4 17
- 11 11 20
- 20 20 26
- 13 13 25
-  ***************************************************
-  */
-
-
 
   saveComment(comment: Comment) {
     const comments = this.loadComments()
     let commentsToUpdate
+    console.log(comment)
     if (comment.id) {
-      const commentToEdit = this.getCommentById(comment.id)!
-      commentToEdit.txt = comment.txt
       commentsToUpdate = comments
-        .filter(currComment => (currComment.id === commentToEdit.id) ? commentToEdit : currComment)
+        .map(currComment => (currComment.id === comment.id) ? comment : currComment)
 
     } else {
-      comment.id = Math.floor(Math.random() * (+Date.now()))
+      comment.id = Math.floor(Math.random() * (+Date.now()/10000))
       commentsToUpdate = [...comments, comment]
     }
+    
     this.updateComments(commentsToUpdate)
 
   }
 
   updateComments(comments: Comment[]) {
     localStorage.setItem(this.COMMENTS_KEY, JSON.stringify(comments))
-    this._comments$.next(comments)
+    this._comments$.next(structuredClone(comments))
   }
 
   loadCommentsFromStorage() {
-    const comments = JSON.parse(localStorage.getItem(this.COMMENTS_KEY) || '[]')
-    return (comments.length > 0) ? comments : null
+    const comments = JSON.parse(localStorage.getItem(this.COMMENTS_KEY)!)
+    return comments
+
   }
 
   /* ***************************************************

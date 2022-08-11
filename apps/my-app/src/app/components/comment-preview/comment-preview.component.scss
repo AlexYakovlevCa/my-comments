@@ -62,6 +62,17 @@
                 position: absolute;
                 gap: .5em;
                 right: 1em;
+
+                &>* {
+                    padding: .8em;
+                    background-color: var(--third);
+                    border: unset;
+                    border-radius: 1em;
+                    &:hover {
+                        background-color: whitesmoke;
+                        outline: 2px solid var(--main);
+                    }
+                }
             }
         }
 

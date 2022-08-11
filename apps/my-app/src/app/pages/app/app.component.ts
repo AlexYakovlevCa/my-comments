@@ -1,10 +1,54 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { Subscription } from 'rxjs'
+import { Comment, User } from '../../models/interfaces'
+import { CommentsService } from '../../services/comments/comments.service'
+import { UsersService } from '../../services/users/users.service'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  title = 'My Comments';
+export class AppComponent implements OnInit, OnDestroy {
+
+  constructor(
+    private commentService: CommentsService,
+    private usersService: UsersService,
+    private cd: ChangeDetectorRef
+  ) { }
+
+  comments!: Comment[]
+  loggedInUser!: User
+
+  commnetsSub!: Subscription
+  loggedInUserSub!: Subscription
+
+  ngOnInit(): void {
+    this.commentService.loadComments()
+    this.usersService.loadLoggedInUser()
+    this.loggedInUserSub = this.usersService.loggedInUser$.subscribe(user => this.loggedInUser = user)
+    this.commnetsSub = this.commentService.comments$.subscribe(comments => {
+      this.comments = comments
+      console.log('alex check')
+      // this.cd.detectChanges()
+      // this.cd.markForCheck()
+    })
+  }
+  ngOnDestroy(): void {
+    this.commnetsSub.unsubscribe()
+    this.loggedInUserSub.unsubscribe()
+  }
+
+  onDeleteComment(commentId: number) {
+    this.commentService.deleteComment(commentId)
+  }
+  onSaveComment(comment:any) {
+    console.log(comment,'hello from app')
+    this.commentService.saveComment(comment)
+  }
+  onDeleteUser(userId: number) {
+    // console.log('delete user')
+    this.commentService.deleteUserComments(userId)
+
+  }
 }

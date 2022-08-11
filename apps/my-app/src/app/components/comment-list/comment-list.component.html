@@ -1,12 +1,17 @@
-    <add-comment *ngIf="loggedInUser" [selectedCommentId]="selectedCommentId"></add-comment>
-<div class="comments-window">
-    <ng-container *ngIf="comments">
-        <comment-preview *ngFor="let comment of comments "
-        (addComment)="onSaveComment($event)" 
-        (deleteComment)="onDeleteComment($event)"
-        (deleteUser)="onDeleteUser($event)" 
+    <add-comment 
+    *ngIf="loggedInUser.id" [loggedInUserId]="loggedInUser.id"
+     (addComment)="addComment.emit($event)" 
+     [selectedCommentId]="selectedCommentId!"
+      ></add-comment>
+      
+<div class="comments-window"  *ngIf="firstLayerComments.length">
+        <comment-preview *ngFor="let comment of firstLayerComments ;trackBy:identify"
+        
+        (deleteUser)="deleteUser.emit($event)" 
+        (addComment)="addComment.emit($event)" 
+        (deleteComment)="deleteComment.emit($event)" 
         (onSelectComment)="onSelectComment($event)"
-        [spacingLeft]="0" [selectedCommentId]="selectedCommentId" [comment]="comment">
+        [spacingLeft]="0" [comment]="comment"
+        [loggedInUserId]="loggedInUser.id">
         </comment-preview>
-    </ng-container>
 </div>
