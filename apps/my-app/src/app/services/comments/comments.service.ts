@@ -47,29 +47,38 @@ export class CommentsService {
 
   deleteComment(commentId: number) {
     // need to delete all comments that has this comment id as parentId
-
     const comments = this.loadComments()
 
     const idx = comments.findIndex(comment => comment.id === commentId)
+
     comments.splice(idx, 1)
-    const parentsIds  = new Set<number>() 
-    const filterdComments = comments.filter(comment => {
+    console.log(comments.length)
+    localStorage.setItem(this.COMMENTS_KEY, JSON.stringify(comments))
+
+    comments.forEach(comment => {
       if (comment.parentCommentId === commentId) {
-        //  this.deleteComment(comment.id)
-        parentsIds.add(comment.id)
+        this.deleteComment(comment.id)
       }
-      return comment.parentCommentId !== commentId
 
     })
-    if(parentsIds.size > 0) {
-      parentsIds.forEach((commentId) =>this.deleteComment(commentId))
-    }
-
-    this.updateComments(filterdComments)
+    // console.log(comments.length)
+    console.log('times')
+    // this.updateComments(comments)
 
   }
+  /* 
+  ***************************************************
+  1 1 2
+ 1 1 3
+ 3 3 4
+ 4 4 17
+ 11 11 20
+ 20 20 26
+ 13 13 25
+  ***************************************************
+  */
 
-  
+
 
   saveComment(comment: Comment) {
     const comments = this.loadComments()

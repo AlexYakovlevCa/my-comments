@@ -15,13 +15,13 @@ export class UsersService {
   private _users$ = new BehaviorSubject<User[]>([])
   public users$ = this._users$.asObservable()
 
-  private _loggedInUser$ = new Subject<User>()
+  private _loggedInUser$ = new BehaviorSubject<User>({} as User)
   public loggedInUser$ = this._loggedInUser$.asObservable()
 
 
-  get getLoggedInUser (){
+  get getLoggedInUser() {
     return this.loadLoggedInUserFromStorage()
-  }   
+  }
 
   public loadLoggedInUser() {
     const user = this.loadLoggedInUserFromStorage()
@@ -47,8 +47,8 @@ export class UsersService {
     }
   }
 
-  public async setSelectedUser(userId: number|null) {
-    if(userId === null) return this._loggedInUser$.next({}as User)
+  public async setSelectedUser(userId: number | null) {
+    if (userId === null) return this._loggedInUser$.next({} as User)
     const users = this.loadUsers()
     const user = users.find(currUser => currUser.id === userId)
     if (user) {
@@ -74,11 +74,11 @@ export class UsersService {
     const user = JSON.parse(localStorage.getItem(this.LOGGED_USER_KEY) || '{}')
     return (Object.keys(user).length > 0) ? user : null
   }
-  public getUserNameById(userId:number){
+  public getUserNameById(userId: number) {
     const user = this.loadUsers().find(user => user.id === userId)
     // console.log(user?.displayName)
     return user?.displayName || 'no such user'
-    
+
   }
 
   /* ***************************************************

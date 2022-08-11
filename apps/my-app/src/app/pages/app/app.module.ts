@@ -8,6 +8,8 @@ import { UserSelectComponent } from '../../components/user-select/user-select.co
 import { CommentListComponent } from '../../components/comment-list/comment-list.component'
 import { CommentPreviewComponent } from '../../components/comment-preview/comment-preview.component'
 import { SpacingLeftDirective } from '../../directives/spacing-left.directive'
+import { AddCommentComponent } from '../../components/add-comment/add-comment.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @NgModule({
   declarations: [
@@ -17,10 +19,11 @@ import { SpacingLeftDirective } from '../../directives/spacing-left.directive'
     UserSelectComponent,
     CommentListComponent,
     CommentPreviewComponent,
-    SpacingLeftDirective
+    SpacingLeftDirective,
+    AddCommentComponent
     
   ],
-  imports: [BrowserModule],
+  imports: [BrowserModule,ReactiveFormsModule,FormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

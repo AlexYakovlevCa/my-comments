@@ -13,6 +13,8 @@ export class CommentPreviewComponent implements OnInit {
 
   @Input() comment!: Comment
   @Input() spacingLeft!: number
+  @Input() selectedCommentId!: (number|null)
+
   loggedInUserId!: number
   ownerDisplayeyName!: string
   comments!: Comment[]
@@ -20,6 +22,7 @@ export class CommentPreviewComponent implements OnInit {
   @Output() deleteUser = new EventEmitter<any>();
   @Output() deleteComment = new EventEmitter<any>();
   @Output() addComment = new EventEmitter<any>();
+  @Output() onSelectComment = new EventEmitter<number>();
 
   constructor(private commentService: CommentsService, private usersService: UsersService) { }
 
@@ -28,7 +31,6 @@ export class CommentPreviewComponent implements OnInit {
     this.comments = this.commentService.getCommentsByParentId(this.comment.id)
     const loggedInUser = this.usersService.getLoggedInUser
     this.loggedInUserId = loggedInUser?.id
-    console.log(this.loggedInUserId, this.comment.ownerId)
   }
 
   

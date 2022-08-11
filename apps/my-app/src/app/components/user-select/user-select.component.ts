@@ -15,6 +15,7 @@ export class UserSelectComponent implements OnInit, OnDestroy {
   selectedUser!: User
   loggedInUserSub!: Subscription
   UsersSub!: Subscription
+  
   async ngOnInit(): Promise<void> {
     this.usersService.loadUsers()
     this.UsersSub = this.usersService.users$.subscribe(users => this.userList = users)

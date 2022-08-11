@@ -1,7 +1,12 @@
+    <add-comment *ngIf="loggedInUser" [selectedCommentId]="selectedCommentId"></add-comment>
 <div class="comments-window">
-    <!-- if user than input -->
-        <ng-container *ngIf="comments" >
-            <comment-preview  (addComment)="onSaveComment($event)" (deleteComment)="onDeleteComment($event)" (deleteUser)="onDeleteUser($event)" *ngFor="let comment of comments " [spacingLeft]="0"  [comment]="comment" ></comment-preview>
-        </ng-container>
+    <ng-container *ngIf="comments">
+        <comment-preview *ngFor="let comment of comments "
+        (addComment)="onSaveComment($event)" 
+        (deleteComment)="onDeleteComment($event)"
+        (deleteUser)="onDeleteUser($event)" 
+        (onSelectComment)="onSelectComment($event)"
+        [spacingLeft]="0" [selectedCommentId]="selectedCommentId" [comment]="comment">
+        </comment-preview>
+    </ng-container>
 </div>
-
