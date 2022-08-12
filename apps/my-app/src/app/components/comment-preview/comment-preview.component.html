@@ -8,7 +8,8 @@
             <span class="user-nickName">{{ownerDisplayeyName}}</span>
             <span class="comment-created-at">{{comment.createdAt|customTimeFrmat}}</span>
         </div>
-        <a  (click)="selectComment(comment.id!,false)" class="add-comment">Reply</a>
+        
+        <a *ngIf="loggedInUserId" (click)="selectComment(comment.id!,false)" class="add-comment">Reply</a>
 
         <div class="comment-txt">{{comment.txt}}</div>
         <div *ngIf="comment.ownerId===loggedInUserId" class="contorller-btns">
