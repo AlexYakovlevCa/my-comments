@@ -17,7 +17,7 @@ export class UsersService {
 
   private _loggedInUser$ = new BehaviorSubject<User>({} as User)
   public loggedInUser$ = this._loggedInUser$.asObservable()
-
+  
 
   get getLoggedInUser() {
     return this.loadLoggedInUserFromStorage()

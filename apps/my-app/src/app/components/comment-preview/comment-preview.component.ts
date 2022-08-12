@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core'
+import { Subscription } from 'rxjs'
 import { Comment } from '../../models/interfaces'
 import { CommentsService } from '../../services/comments/comments.service'
 import { UsersService } from '../../services/users/users.service'
@@ -7,9 +8,9 @@ import { UsersService } from '../../services/users/users.service'
   selector: 'comment-preview',
   templateUrl: './comment-preview.component.html',
   styleUrls: ['./comment-preview.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommentPreviewComponent implements OnInit {
+export class CommentPreviewComponent implements OnInit , OnDestroy , OnChanges{
 
   @Input() comment!: Comment
   @Input() spacingLeft!: number
@@ -21,6 +22,8 @@ export class CommentPreviewComponent implements OnInit {
   comments!: Comment[]
   isEdit: boolean = false
 
+  selectedCommentSub! : Subscription
+
   @Output() deleteUser = new EventEmitter<number>();
   @Output() deleteComment = new EventEmitter<number>();
   @Output() addComment = new EventEmitter<Comment>();
@@ -29,24 +32,34 @@ export class CommentPreviewComponent implements OnInit {
   constructor(private commentService: CommentsService, private usersService: UsersService) { }
 
   ngOnInit(): void {
+    this.selectedCommentSub = this.commentService.selectedCommentId$.subscribe(selectedId=>this.selectedCommentId=selectedId)
     this.ownerDisplayeyName = this.usersService.getUserNameById(this.comment.ownerId)
-    this.comments = this.commentService.getCommentsByParentId(this.comment.id!)
-    const loggedInUser = this.usersService.getLoggedInUser
-    // this.loggedInUserId = loggedInUser?.id
-    
+    this.comments = this.selectedComments
+    // console.log(this.comments)
+
   }
-  
+  ngOnChanges(changes: SimpleChanges): void {
+    this.comments = this.selectedComments
+
+  }
+  ngOnDestroy(): void {
+      this.selectedCommentSub.unsubscribe()
+  }
+
   selectComment(commentId:number,isEdit:boolean){
     this.isEdit = isEdit
     this.selectedCommentId = commentId
     console.log(commentId,'commentId inside comment' )
+    // this.comments = this.commentService.getCommentsByParentId(this.comment.id!)
+
     this.onSelectComment.emit(commentId)
   }
   identify(idx:any,item:any){
     return item.id 
   }
-  // sendComment(comment:Comment){
-  //   console.log('we are in preview',comment)
-  //   this.addComment.emit(comment)
-  // }
+  get selectedComments(){
+    return this.commentService.getCommentsByParentId(this.comment.id!)
+    
+  }
+ 
 }

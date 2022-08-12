@@ -1,12 +1,11 @@
     <add-comment 
     *ngIf="loggedInUser.id" [loggedInUserId]="loggedInUser.id"
      (addComment)="addComment.emit($event)" 
-     [selectedCommentId]="selectedCommentId!"
+     [selectedCommentId]="selectedCommentId"
       ></add-comment>
       
 <div class="comments-window"  *ngIf="firstLayerComments.length">
         <comment-preview *ngFor="let comment of firstLayerComments ;trackBy:identify"
-        
         (deleteUser)="deleteUser.emit($event)" 
         (addComment)="addComment.emit($event)" 
         (deleteComment)="deleteComment.emit($event)" 

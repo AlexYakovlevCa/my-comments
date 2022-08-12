@@ -12,6 +12,7 @@
     max-width: 800px;
 
     & .comment-preview {
+
         background-color: #F0FFF0;
 
         display: flex;
@@ -20,6 +21,11 @@
         padding: 1em 1em;
         gap: 1em;
         box-shadow: 0 0 1px;
+        position: relative;
+        &.highlight{
+            box-shadow: 0 0 1px var(--third);
+
+        }
 
         // margin-inline-end: 200px;
         & .user-data {
@@ -29,6 +35,17 @@
 
         & .comment-txt {
             max-width: 60%;
+        }
+       & .add-comment{
+            position: absolute;
+            top: .6em;
+            right:.6em;
+            font-size: 12px;
+            &:hover{
+                color: var(--main);
+                cursor: pointer;
+            }
+            
         }
 
         .user-img {
@@ -71,6 +88,8 @@
                     &:hover {
                         background-color: whitesmoke;
                         outline: 2px solid var(--main);
+                        cursor: pointer;
+
                     }
                 }
             }

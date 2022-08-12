@@ -1,43 +1,47 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import { FormControl, FormGroup } from '@angular/forms'
+import { Subscription } from 'rxjs'
 import { Comment, User } from '../../models/interfaces'
 import { CommentsService } from '../../services/comments/comments.service'
-
 @Component({
   selector: 'add-comment',
   templateUrl: './add-comment.component.html',
   styleUrls: ['./add-comment.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddCommentComponent implements OnInit {
+export class AddCommentComponent implements OnInit ,OnDestroy{
 
-  @Input() selectedCommentId?: (number | undefined)
-  @Input() loggedInUserId!: (number | null)
+  @Input()loggedInUserId!: (number | null)
   @Input() isEdit?: boolean
-  commentToEdit! : (Comment|undefined)
   @Output() addComment = new EventEmitter<Comment>()
   @Output() myEvent = new EventEmitter<any>()
+  
+  @Input() selectedCommentId?: (number | null)
+  commentToEdit! : (Comment|undefined)
 
+  selectedCommentSub!:Subscription
   constructor(private commentService: CommentsService) { }
 
   addCommentForm!: FormGroup
 
   ngOnInit(): void {
+ 
     if(this.selectedCommentId){
       this.commentToEdit =  this.commentService.getCommentById(this.selectedCommentId)
     }
-    // const initalText = (this.selectedComment) ?this.selectedComment.txt : ''
     const initalText = ''
     this.addCommentForm = new FormGroup({
       txt: new FormControl(initalText)
     })
     console.log(this.selectedCommentId, 'this is the selectedComment')
   }
+  ngOnDestroy(){
+  }
 
   submitComment(ev: FormDataEvent) {
     const value = this.addCommentForm.get('txt')?.value
     console.log(this.addCommentForm.get('txt')?.value, 'value')
-    
+    console.log(this.selectedCommentId)
     if (!value) return
 
     const comment: Comment = {
@@ -59,7 +63,7 @@ export class AddCommentComponent implements OnInit {
       }
     }
     console.log({...comment}, 'my comment')
-    
+    this.commentService.setSelectedCommentId(null!)
     this.addComment.emit(comment)
     
   }
