@@ -1,12 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core'
 
-
 @Pipe({
   name: 'customTimeFrmat',
   pure: true,
 })
 export class CustomTimeFormat implements PipeTransform {
-  transform(value: any, args?: any): any {
+  transform(value: any): any {
     if (value) {
       const seconds = Math.floor((+new Date() - +new Date(value)) / 1000)
 
@@ -20,22 +19,23 @@ export class CustomTimeFormat implements PipeTransform {
         minute: 60,
         second: 1,
       }
+
       let counter
       for (const int in intervals) {
         counter = Math.floor(seconds / intervals[int])
 
         if (counter > 0) {
           if (int === 'year') {
-            const dateObj = new Date(value)
-            const day = dateObj.getDate().toString().padStart(2, '0')
-            const month = dateObj.getMonth().toString().padStart(2, '0')
-            return `${day}/${month}/${dateObj.getFullYear()}`
+            const dateValue = new Date(value)
+            const day = dateValue.getDate().toString().padStart(2, '0')
+            const month = dateValue.getMonth().toString().padStart(2, '0')
+            return `${day}/${month}/${dateValue.getFullYear()}`
           }
 
           if (counter === 1) {
-            return `${counter}  ${int} ago ` // singular (1 day ago)
+            return `${counter}  ${int} ago `
           } else {
-            return `${counter}  ${int}s ago ` // plural (2 days ago)
+            return `${counter}  ${int}s ago `
           }
         }
       }

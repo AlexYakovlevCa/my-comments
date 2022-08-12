@@ -1,4 +1,4 @@
-<form  class="add-comment-form" (ngSubmit)="submitComment($event)" [formGroup]="addCommentForm" action="">
+<form  class="add-comment-form" (ngSubmit)="submitComment()" [formGroup]="addCommentForm" action="">
     <div class="user-img">
         <img [src]="'../../assets/user-imgs/'+ loggedInUserId+'.jpg'" alt="">
     </div>

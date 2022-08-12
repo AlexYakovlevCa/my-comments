@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 import { User } from '../../models/interfaces'
 import baseUsers from '../../../assets/user-data/users.json'
-import { Subject } from 'rxjs'
 @Injectable({
   providedIn: 'root'
 })
@@ -25,7 +24,6 @@ export class UsersService {
 
   public loadLoggedInUser() {
     const user = this.loadLoggedInUserFromStorage()
-    console.log(user)
     if (user) this._loggedInUser$.next({...user})
     else this._loggedInUser$.next({} as User)
   }
@@ -77,7 +75,6 @@ export class UsersService {
   }
   public getUserNameById(userId: number) {
     const user = this.loadUsers().find(user => user.id === userId)
-    // console.log(user?.displayName)
     return user?.displayName || 'no such user'
 
   }

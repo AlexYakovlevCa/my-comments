@@ -1,13 +1,12 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import { FormControl, FormGroup } from '@angular/forms'
 import { Subscription } from 'rxjs'
-import { Comment, User } from '../../models/interfaces'
+import { Comment } from '../../models/interfaces'
 import { CommentsService } from '../../services/comments/comments.service'
 @Component({
   selector: 'add-comment',
   templateUrl: './add-comment.component.html',
   styleUrls: ['./add-comment.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddCommentComponent implements OnInit ,OnDestroy{
 
@@ -33,15 +32,12 @@ export class AddCommentComponent implements OnInit ,OnDestroy{
     this.addCommentForm = new FormGroup({
       txt: new FormControl(initalText)
     })
-    console.log(this.selectedCommentId, 'this is the selectedComment')
   }
   ngOnDestroy(){
   }
 
-  submitComment(ev: FormDataEvent) {
+  submitComment() {
     const value = this.addCommentForm.get('txt')?.value
-    console.log(this.addCommentForm.get('txt')?.value, 'value')
-    console.log(this.selectedCommentId)
     if (!value) return
 
     const comment: Comment = {
@@ -53,8 +49,6 @@ export class AddCommentComponent implements OnInit ,OnDestroy{
     }
 
     if (this.commentToEdit) {
-      //  get selectedcoment by id
-      console.log('inside iffffffffffffff')
       if (this.isEdit) {
         comment.parentCommentId = this.commentToEdit.parentCommentId
         comment.id = this.commentToEdit.id
@@ -62,7 +56,7 @@ export class AddCommentComponent implements OnInit ,OnDestroy{
         comment.parentCommentId = this.commentToEdit.id
       }
     }
-    console.log({...comment}, 'my comment')
+    this.addCommentForm.get('txt')?.setValue('')
     this.commentService.setSelectedCommentId(null!)
     this.addComment.emit(comment)
     

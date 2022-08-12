@@ -29,11 +29,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.loggedInUserSub = this.usersService.loggedInUser$.subscribe(user => this.loggedInUser = user)
     this.commnetsSub = this.commentService.comments$.subscribe(comments => {
       this.comments = comments
-      console.log('alex check')
-      // this.cd.detectChanges()
-      // this.cd.markForCheck()
     })
   }
+  
   ngOnDestroy(): void {
     this.commnetsSub.unsubscribe()
     this.loggedInUserSub.unsubscribe()
@@ -42,13 +40,12 @@ export class AppComponent implements OnInit, OnDestroy {
   onDeleteComment(commentId: number) {
     this.commentService.deleteComment(commentId)
   }
+
   onSaveComment(comment:any) {
-    console.log(comment,'hello from app')
     this.commentService.saveComment(comment)
   }
-  onDeleteUser(userId: number) {
-    // console.log('delete user')
-    this.commentService.deleteUserComments(userId)
 
+  onDeleteUser(userId: number) {
+    this.commentService.deleteUserComments(userId)
   }
 }

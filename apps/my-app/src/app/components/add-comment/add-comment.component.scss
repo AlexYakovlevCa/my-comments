@@ -1,12 +1,3 @@
-// <form  class="add-comment-form" (ngSubmit)="submitComment()" [formGroup]="addCommentForm" action="">
-//     <!-- {{loggedInUser?.id|json}} -->
-//     <div class="user-img">
-//         <img [src]="'../../assets/user-imgs/'+ loggedInUserId+'.jpg'" alt="">
-//     </div>
-//     <input type="text" placeholder="Write your comments" formControlName="txt">
-//     <button>Submit comment</button>
-// </form>
-
 .add-comment-form {
     background-color: var(--third);
     display: flex;
@@ -18,14 +9,9 @@
     & .user-img {
         height: 50px;
         width: 50px;
-        // overflow: hidden;
-        // position: relative;
-        // right: 1.5em;
-
+    
         & img {
             border-radius: 50%;
-            // border: 1px solid black;
-            // height: 100%;
             width: 50px;
             object-fit: cover;
 
@@ -38,7 +24,6 @@
         padding: .6em;
         border: unset;
         box-shadow: 0 0 1.5px;
-        // border: 2px solid black;
         border-radius: 1em;
         background-color: var(--main);
         height: 50px;

@@ -8,7 +8,6 @@ import { UsersService } from '../../services/users/users.service'
   selector: 'comment-list',
   templateUrl: './comment-list.component.html',
   styleUrls: ['./comment-list.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CommentListComponent implements OnInit ,OnChanges{
 
@@ -16,8 +15,9 @@ export class CommentListComponent implements OnInit ,OnChanges{
 
   @Input() comments!: Comment[]
   @Input() loggedInUser!: User
-  selectedCommentId!: (number | null)
+  
   firstLayerComments!: Comment[]
+  selectedCommentId!: (number | null)
 
   selectedCommentSub!:Subscription
 
@@ -28,36 +28,30 @@ export class CommentListComponent implements OnInit ,OnChanges{
   ngOnInit(): void {
     this.firstLayerComments = this.filterComments
     this.selectedCommentSub = this.commentService.selectedCommentId$.subscribe(selectedId=>this.selectedCommentId=selectedId)
-
-
   }
-  ngOnChanges({comments}: SimpleChanges): void {
-      
-      this.firstLayerComments = this.filterComments
 
+  ngOnChanges(changes: SimpleChanges): void {
+      this.firstLayerComments = this.filterComments
   }
 
   onSelectComment(commentId: number | null): void {
-    console.log(commentId,'@@@@@@@@@@@@@',this.selectedCommentId)
     const id = (this.selectedCommentId === commentId) ? null : commentId
-    // this.selectedCommentId  = id
     this.commentService.setSelectedCommentId(id!)
-    // console.log(this.selectedCommentId, 'selectedCommentId', '\n ', commentId)
-
   }
   
   getUserNickName(userId: number) {
     return this.usersService.getUserNameById(userId)
   }
+
   identify(idx: any, item: any) {
     return idx
   }
+
   saveComment(comment: Comment) {
-    // console.log('hey from list')
     this.addComment.emit(comment)
   }
+
   get filterComments(){
     return this.comments.filter((comment => !comment.parentCommentId)).sort((commentA,commentB) => new Date(commentB.createdAt).getTime()-new Date(commentA.createdAt).getTime())
-    
   }
 }

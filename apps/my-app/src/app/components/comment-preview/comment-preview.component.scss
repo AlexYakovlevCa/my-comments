@@ -1,20 +1,15 @@
 .comment-preview-tree {
     border-left: 3px solid #696969;
-    // width: 300px;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
     margin: auto;
     gap: 20px;
-
-
-
     max-width: 800px;
 
     & .comment-preview {
 
         background-color: #F0FFF0;
-
         display: flex;
         align-items: center;
         justify-content: flex-start;
@@ -22,12 +17,11 @@
         gap: 1em;
         box-shadow: 0 0 1px;
         position: relative;
+
         &.highlight{
             box-shadow: 0 0 1px var(--third);
-
         }
 
-        // margin-inline-end: 200px;
         & .user-data {
             display: flex;
             flex-direction: column;
@@ -51,14 +45,9 @@
         .user-img {
             height: 50px;
             width: 50px;
-            // overflow: hidden;
-            // position: relative;
-            // right: 1.5em;
 
             & img {
                 border-radius: 50%;
-                // border: 1px solid black;
-                // height: 100%;
                 width: 50px;
                 object-fit: cover;
 
@@ -99,8 +88,3 @@
 
 
 }
-
-// <div class="user-data">
-// <span class="user-nickName">{{ownerDisplayeyName}}</span>
-// <span class="comment-created-at">{{comment.createdAt|date}}</span>
-// </div>

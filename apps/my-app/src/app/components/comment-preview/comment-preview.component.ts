@@ -16,18 +16,18 @@ export class CommentPreviewComponent implements OnInit , OnDestroy , OnChanges{
   @Input() spacingLeft!: number
   @Input() loggedInUserId!: number
 
-  selectedCommentId!: (number|null)
+  @Output() deleteUser = new EventEmitter<number>();
+  @Output() deleteComment = new EventEmitter<number>();
+  @Output() addComment = new EventEmitter<Comment>();
+  @Output() onSelectComment = new EventEmitter<number>();
 
+  selectedCommentId!: (number|null)
   ownerDisplayeyName!: string
   comments!: Comment[]
   isEdit: boolean = false
 
   selectedCommentSub! : Subscription
 
-  @Output() deleteUser = new EventEmitter<number>();
-  @Output() deleteComment = new EventEmitter<number>();
-  @Output() addComment = new EventEmitter<Comment>();
-  @Output() onSelectComment = new EventEmitter<number>();
 
   constructor(private commentService: CommentsService, private usersService: UsersService) { }
 
@@ -35,13 +35,13 @@ export class CommentPreviewComponent implements OnInit , OnDestroy , OnChanges{
     this.selectedCommentSub = this.commentService.selectedCommentId$.subscribe(selectedId=>this.selectedCommentId=selectedId)
     this.ownerDisplayeyName = this.usersService.getUserNameById(this.comment.ownerId)
     this.comments = this.selectedComments
-    // console.log(this.comments)
-
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     this.comments = this.selectedComments
 
   }
+
   ngOnDestroy(): void {
       this.selectedCommentSub.unsubscribe()
   }
@@ -49,17 +49,15 @@ export class CommentPreviewComponent implements OnInit , OnDestroy , OnChanges{
   selectComment(commentId:number,isEdit:boolean){
     this.isEdit = isEdit
     this.selectedCommentId = commentId
-    console.log(commentId,'commentId inside comment' )
-    // this.comments = this.commentService.getCommentsByParentId(this.comment.id!)
-
     this.onSelectComment.emit(commentId)
   }
+
   identify(idx:any,item:any){
     return item.id 
   }
+
   get selectedComments(){
     return this.commentService.getCommentsByParentId(this.comment.id!)
-    
   }
  
 }

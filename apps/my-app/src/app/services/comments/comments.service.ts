@@ -45,14 +45,12 @@ export class CommentsService {
     const comments = this.loadComments()
     const comentsToDelete = comments.filter(comment => comment.ownerId === userId)
     comentsToDelete.forEach(comment => this.deleteComment(comment.id!))
-    // this.updateComments(comentsToDelete)
     this.usersService.deleteUser(userId)
     this.setSelectedCommentId(null)
 
   }
 
   deleteComment(commentId: number) {
-    // need to delete all comments that has this comment id as parentId
     const comments = this.loadComments()
 
     const idx = comments.findIndex(comment => comment.id === commentId)
@@ -65,14 +63,12 @@ export class CommentsService {
       }
 
     })
-    // return comments
 
   }
 
   saveComment(comment: Comment) {
     const comments = this.loadComments()
     let commentsToUpdate
-    console.log(comment)
     if (comment.id) {
       commentsToUpdate = comments
         .map(currComment => (currComment.id === comment.id) ? comment : currComment)
