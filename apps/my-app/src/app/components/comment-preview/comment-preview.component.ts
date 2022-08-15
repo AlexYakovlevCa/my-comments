@@ -53,11 +53,11 @@ export class CommentPreviewComponent implements OnInit , OnDestroy , OnChanges{
   }
 
   identify(idx:any,item:any){
-    return item.id 
+    return idx.id 
   }
 
   get selectedComments(){
-    return this.commentService.getCommentsByParentId(this.comment.id!)
+    return this.commentService.getCommentsByParentId(this.comment.id)
   }
  
 }

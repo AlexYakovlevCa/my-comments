@@ -13,7 +13,7 @@ import { UserMsgService } from '../msg/user-msg.service'
 })
 export class CommentsService {
   private COMMENTS_KEY = 'comments'
-  constructor(private userMsgService:UserMsgService) { }
+  constructor(private userMsgService: UserMsgService) { }
 
   private _comments$ = new BehaviorSubject<Comment[]>([])
   public comments$ = this._comments$.asObservable()
@@ -31,7 +31,7 @@ export class CommentsService {
     this._selectedCommentId$.next(commentId)
   }
 
-  getCommentsByParentId(commentId: number): Comment[] {
+  getCommentsByParentId(commentId: (number | undefined)): Comment[] {
     const comments = this.loadComments()
     return [...comments.filter(comment => comment.parentCommentId === commentId).sort((commentA, commentB) => new Date(commentB.createdAt).getTime() - new Date(commentA.createdAt).getTime())]
 
@@ -45,7 +45,7 @@ export class CommentsService {
 
   }
 
-  async deleteUserComments(userId: number) {
+  deleteUserComments(userId: number) {
 
     const comments = this.loadComments()
     const comentsToDelete = comments.filter(comment => comment.ownerId === userId)
@@ -54,19 +54,28 @@ export class CommentsService {
 
   }
 
-  deleteComment(commentId: number, isFirstRun: boolean = true, loadedComments: Comment[] = []): void {
+  deleteComment(commentId: number): void {
 
-    const comments = isFirstRun ? this.loadComments() : loadedComments
-    const idx = comments.findIndex(comment => comment.id === commentId)
-    comments.splice(idx, 1)
+    let comments = this.loadComments()
+    const Idx = comments.findIndex(comment => comment.id === commentId)
+    comments.splice(Idx, 1)
 
-    localStorage.setItem(this.COMMENTS_KEY, JSON.stringify(comments))
-    comments.forEach(comment => {
-      if (comment.parentCommentId === commentId) {
-        this.deleteComment(comment.id!, false, comments)
-      }
-    })
-    this.userMsgService.setUserMsg({type: 'succsess', txt: 'userMsgService'})
+    const parentComments = new Set<number>([commentId])
+    let isFoundInRound = true
+    
+    while (isFoundInRound && comments.length) {
+      isFoundInRound = false
+      comments = comments.filter(comment => {
+        if (parentComments.has(comment.parentCommentId!)) {
+          parentComments.add(comment.id!)
+          isFoundInRound = true
+          return false
+        } else return true
+
+      })
+    }
+    this.updateComments(comments)
+    this.userMsgService.setUserMsg({ type: 'succsess', txt: 'Commnet deleted' })
   }
 
   saveComment(comment: Comment) {
@@ -75,19 +84,18 @@ export class CommentsService {
     if (comment.id) {
       commentsToUpdate = comments
         .map(currComment => (currComment.id === comment.id) ? comment : currComment)
-        this.userMsgService.setUserMsg({type: 'succsess', txt: 'Comment edited'})
+      this.userMsgService.setUserMsg({ type: 'succsess', txt: 'Comment edited' })
 
     } else {
       comment.id = Math.floor(Math.random() * (+Date.now() / 10000))
-      if(comment.parentCommentId){
-        this.userMsgService.setUserMsg({type: 'succsess', txt: 'reply added'})
+      if (comment.parentCommentId) {
+        this.userMsgService.setUserMsg({ type: 'succsess', txt: 'reply added' })
       }
-      this.userMsgService.setUserMsg({type: 'succsess', txt: 'comment added'})
+      this.userMsgService.setUserMsg({ type: 'succsess', txt: 'comment added' })
       commentsToUpdate = [...comments, comment]
     }
     this.setSelectedCommentId(null)
     this.updateComments(commentsToUpdate)
-    // this.userMsgService.setUserMsg({type: 'succsess', txt: 'comment added'})
 
   }
 
