@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 import { User } from '../../models/interfaces'
 import baseUsers from '../../../assets/user-data/users.json'
+import { CommentsService } from '../comments/comments.service'
 @Injectable({
   providedIn: 'root'
 })
@@ -9,7 +10,7 @@ export class UsersService {
   private USERS_KEY: string = 'users'
   private LOGGED_USER_KEY: string = 'loggedInUser'
 
-  constructor() { }
+  constructor(private commentService: CommentsService) { }
 
   private _users$ = new BehaviorSubject<User[]>([])
   public users$ = this._users$.asObservable()
@@ -39,13 +40,14 @@ export class UsersService {
     const users = this.loadUsers()
     const idx = users.findIndex((user) => user.id === userId)
     if (idx !== -1) {
+      this.commentService.deleteUserComments(userId)
       localStorage.removeItem(this.LOGGED_USER_KEY)
       users.splice(idx, 1)
       this.setSelectedUser(null)
       this.updateUsers([...users])
     }
   }
-
+  
   public async setSelectedUser(userId: number | null) {
     if (userId === null) return this._loggedInUser$.next({} as User)
     const users = this.loadUsers()

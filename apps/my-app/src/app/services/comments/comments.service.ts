@@ -3,17 +3,21 @@ import { BehaviorSubject, Subject } from 'rxjs'
 import { Comment } from '../../models/interfaces'
 import baseComments from '../../../assets/user-data/comments.json'
 import { UsersService } from '../users/users.service'
+
+
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class CommentsService {
   private COMMENTS_KEY = 'comments'
-  constructor(private usersService: UsersService) { }
+  constructor() { }
 
   private _comments$ = new BehaviorSubject<Comment[]>([])
   public comments$ = this._comments$.asObservable()
 
-  private _selectedCommentId$ = new Subject<number|null>()
+  private _selectedCommentId$ = new Subject<number | null>()
   public selectedCommentId$ = this._selectedCommentId$.asObservable()
 
   loadComments(): Comment[] {
@@ -22,20 +26,20 @@ export class CommentsService {
     return comments
   }
 
-  setSelectedCommentId(commentId: number|null){
+  setSelectedCommentId(commentId: number | null) {
     this._selectedCommentId$.next(commentId)
   }
 
   getCommentsByParentId(commentId: number): Comment[] {
     const comments = this.loadComments()
-    return [...comments.filter(comment => comment.parentCommentId === commentId).sort((commentA,commentB) => new Date(commentB.createdAt).getTime()-new Date(commentA.createdAt).getTime())]
+    return [...comments.filter(comment => comment.parentCommentId === commentId).sort((commentA, commentB) => new Date(commentB.createdAt).getTime() - new Date(commentA.createdAt).getTime())]
 
   }
 
   getCommentById(commentId: number) {
     const comments = this.loadComments()
-    const comment = comments.find(comment =>  comment.id === commentId)
-    if(comment) return {...comment}
+    const comment = comments.find(comment => comment.id === commentId)
+    if (comment) return { ...comment }
     else return {} as Comment
 
   }
@@ -45,23 +49,22 @@ export class CommentsService {
     const comments = this.loadComments()
     const comentsToDelete = comments.filter(comment => comment.ownerId === userId)
     comentsToDelete.forEach(comment => this.deleteComment(comment.id!))
-    this.usersService.deleteUser(userId)
+    // this.usersService.deleteUser(userId)
     this.setSelectedCommentId(null)
 
   }
 
-  deleteComment(commentId: number) {
-    const comments = this.loadComments()
+  deleteComment(commentId: number, isFirstRun: boolean = true, loadedComments: Comment[] = []): void {
 
+    const comments = isFirstRun ? this.loadComments() : loadedComments
     const idx = comments.findIndex(comment => comment.id === commentId)
     comments.splice(idx, 1)
-   
+
     localStorage.setItem(this.COMMENTS_KEY, JSON.stringify(comments))
     comments.forEach(comment => {
       if (comment.parentCommentId === commentId) {
-        this.deleteComment(comment.id!)
+        this.deleteComment(comment.id!, false, comments)
       }
-
     })
 
   }
@@ -74,7 +77,7 @@ export class CommentsService {
         .map(currComment => (currComment.id === comment.id) ? comment : currComment)
 
     } else {
-      comment.id = Math.floor(Math.random() * (+Date.now()/10000))
+      comment.id = Math.floor(Math.random() * (+Date.now() / 10000))
       commentsToUpdate = [...comments, comment]
     }
     this.setSelectedCommentId(null)

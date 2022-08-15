@@ -46,6 +46,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   onDeleteUser(userId: number) {
-    this.commentService.deleteUserComments(userId)
+    this.usersService.deleteUser(userId)
   }
 }

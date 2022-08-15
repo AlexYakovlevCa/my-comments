@@ -24,13 +24,13 @@
         [loggedInUserId]="loggedInUserId"  [isEdit]="isEdit"></add-comment>
 
     <ng-container *ngIf="comments">
-        <comment-preview *ngFor="let item of comments;;trackBy:identify "
+        <comment-preview *ngFor="let comment of comments;trackBy:identify "
             [loggedInUserId]="loggedInUserId"
             (onSelectComment)=" onSelectComment.emit($event)" 
             (deleteUser)="deleteUser.emit($event)"
             (addComment)="addComment.emit($event)"
             (deleteComment)="deleteComment.emit($event)" 
-            [spacingLeft]="spacingLeft+10" [comment]="item">
+            [spacingLeft]="spacingLeft+10" [comment]="comment">
         </comment-preview>
     </ng-container>
 </section>
