@@ -11,3 +11,8 @@ export interface Comment{
     createdAt: (number | Date)
     deletedAt: null
   }
+
+  export interface Msg {
+    type?: string
+    txt?: string
+  }

@@ -3,6 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs'
 import { Comment } from '../../models/interfaces'
 import baseComments from '../../../assets/user-data/comments.json'
 import { UsersService } from '../users/users.service'
+import { UserMsgService } from '../msg/user-msg.service'
 
 
 
@@ -12,7 +13,7 @@ import { UsersService } from '../users/users.service'
 })
 export class CommentsService {
   private COMMENTS_KEY = 'comments'
-  constructor() { }
+  constructor(private userMsgService:UserMsgService) { }
 
   private _comments$ = new BehaviorSubject<Comment[]>([])
   public comments$ = this._comments$.asObservable()
@@ -44,12 +45,11 @@ export class CommentsService {
 
   }
 
-  deleteUserComments(userId: number) {
+  async deleteUserComments(userId: number) {
 
     const comments = this.loadComments()
     const comentsToDelete = comments.filter(comment => comment.ownerId === userId)
     comentsToDelete.forEach(comment => this.deleteComment(comment.id!))
-    // this.usersService.deleteUser(userId)
     this.setSelectedCommentId(null)
 
   }
@@ -66,7 +66,7 @@ export class CommentsService {
         this.deleteComment(comment.id!, false, comments)
       }
     })
-
+    this.userMsgService.setUserMsg({type: 'succsess', txt: 'userMsgService'})
   }
 
   saveComment(comment: Comment) {
@@ -75,13 +75,19 @@ export class CommentsService {
     if (comment.id) {
       commentsToUpdate = comments
         .map(currComment => (currComment.id === comment.id) ? comment : currComment)
+        this.userMsgService.setUserMsg({type: 'succsess', txt: 'Comment edited'})
 
     } else {
       comment.id = Math.floor(Math.random() * (+Date.now() / 10000))
+      if(comment.parentCommentId){
+        this.userMsgService.setUserMsg({type: 'succsess', txt: 'reply added'})
+      }
+      this.userMsgService.setUserMsg({type: 'succsess', txt: 'comment added'})
       commentsToUpdate = [...comments, comment]
     }
     this.setSelectedCommentId(null)
     this.updateComments(commentsToUpdate)
+    // this.userMsgService.setUserMsg({type: 'succsess', txt: 'comment added'})
 
   }
 

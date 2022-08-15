@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs'
 import { User } from '../../models/interfaces'
 import baseUsers from '../../../assets/user-data/users.json'
 import { CommentsService } from '../comments/comments.service'
+import { UserMsgService } from '../msg/user-msg.service'
 @Injectable({
   providedIn: 'root'
 })
@@ -10,7 +11,7 @@ export class UsersService {
   private USERS_KEY: string = 'users'
   private LOGGED_USER_KEY: string = 'loggedInUser'
 
-  constructor(private commentService: CommentsService) { }
+  constructor(private commentService: CommentsService,private userMsgService: UserMsgService) { }
 
   private _users$ = new BehaviorSubject<User[]>([])
   public users$ = this._users$.asObservable()
@@ -54,6 +55,8 @@ export class UsersService {
     const user = users.find(currUser => currUser.id === userId)
     if (user) {
       localStorage.setItem(this.LOGGED_USER_KEY, JSON.stringify(user))
+      this.userMsgService.setUserMsg({type: 'succsess', txt: `${user.displayName} logged in` })
+
       this._loggedInUser$.next(user)
     }
     else {

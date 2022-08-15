@@ -11,6 +11,7 @@ import { SpacingLeftDirective } from '../../directives/spacing-left.directive'
 import { AddCommentComponent } from '../../components/add-comment/add-comment.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { CustomTimeFormat } from '../../pipes/pipes.pipe'
+import { UserMsgComponent } from '../../components/user-msg/user-msg.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +22,8 @@ import { CustomTimeFormat } from '../../pipes/pipes.pipe'
     CommentPreviewComponent,
     SpacingLeftDirective,
     AddCommentComponent,
-    CustomTimeFormat
+    CustomTimeFormat,
+    UserMsgComponent
   ],
   imports: [BrowserModule, ReactiveFormsModule, FormsModule],
   providers: [],
