@@ -62,10 +62,10 @@ export class CommentsService {
 
     const parentComments = new Set<number>([commentId])
     let isFoundInRound = true
-    
+
     while (isFoundInRound && comments.length) {
       isFoundInRound = false
-      comments = comments.filter(comment => {
+      comments = comments.filter((comment) => {
         if (parentComments.has(comment.parentCommentId!)) {
           parentComments.add(comment.id!)
           isFoundInRound = true

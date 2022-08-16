@@ -23,8 +23,8 @@
     <add-comment *ngIf="comment.id===selectedCommentId" [selectedCommentId]="selectedCommentId" (addComment)="addComment.emit($event)"
         [loggedInUserId]="loggedInUserId"  [isEdit]="isEdit"></add-comment>
 
-    <ng-container *ngIf="comments">
-        <comment-preview *ngFor="let comment of comments;trackBy:identify "
+    <ng-container *ngIf="comments.length">
+        <comment-preview *ngFor="let comment of this.selectedComments;trackBy:identify "
             [loggedInUserId]="loggedInUserId"
             (onSelectComment)=" onSelectComment.emit($event)" 
             (deleteUser)="deleteUser.emit($event)"

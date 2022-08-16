@@ -19,7 +19,21 @@
         position: relative;
 
         &.highlight{
-            box-shadow: 0 0 1px var(--third);
+            outline: 3px solid var(--main);
+            background-color: #d0f7e3	;
+            .user-img {
+            
+    
+                & img {
+                    border-radius: 50%;
+                    outline: 3px solid var(--main);
+                    width: 50px;
+                    object-fit: cover;
+    
+                    aspect-ratio: 1/1;
+    
+                }
+            }
         }
 
         & .user-data {

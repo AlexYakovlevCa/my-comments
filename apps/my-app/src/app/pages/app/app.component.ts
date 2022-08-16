@@ -28,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.usersService.loadLoggedInUser()
     this.loggedInUserSub = this.usersService.loggedInUser$.subscribe(user => this.loggedInUser = user)
     this.commnetsSub = this.commentService.comments$.subscribe(comments => {
+      // console.log(comments)
       this.comments = comments
     })
   }

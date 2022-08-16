@@ -10,7 +10,7 @@ import { UsersService } from '../../services/users/users.service'
   styleUrls: ['./comment-preview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommentPreviewComponent implements OnInit , OnDestroy , OnChanges{
+export class CommentPreviewComponent implements OnInit , OnDestroy {
 
   @Input() comment!: Comment
   @Input() spacingLeft!: number
@@ -20,10 +20,10 @@ export class CommentPreviewComponent implements OnInit , OnDestroy , OnChanges{
   @Output() deleteComment = new EventEmitter<number>();
   @Output() addComment = new EventEmitter<Comment>();
   @Output() onSelectComment = new EventEmitter<number>();
-
+  
+  comments!: Comment[]
   selectedCommentId!: (number|null)
   ownerDisplayeyName!: string
-  comments!: Comment[]
   isEdit: boolean = false
 
   selectedCommentSub! : Subscription
@@ -37,10 +37,6 @@ export class CommentPreviewComponent implements OnInit , OnDestroy , OnChanges{
     this.comments = this.selectedComments
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.comments = this.selectedComments
-
-  }
 
   ngOnDestroy(): void {
       this.selectedCommentSub.unsubscribe()

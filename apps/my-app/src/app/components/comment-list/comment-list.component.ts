@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { Comment, User } from '../../models/interfaces'
 import { CommentsService } from '../../services/comments/comments.service'
@@ -9,7 +9,7 @@ import { UsersService } from '../../services/users/users.service'
   templateUrl: './comment-list.component.html',
   styleUrls: ['./comment-list.component.scss']
 })
-export class CommentListComponent implements OnInit, OnChanges {
+export class CommentListComponent implements OnInit , OnDestroy {
 
   constructor(private usersService: UsersService, private commentService: CommentsService) { }
 
@@ -21,17 +21,18 @@ export class CommentListComponent implements OnInit, OnChanges {
 
   selectedCommentSub!: Subscription
 
-  @Output() deleteUser = new EventEmitter<number>();
-  @Output() deleteComment = new EventEmitter<number>();
-  @Output() addComment = new EventEmitter<Comment>();
+  @Output() deleteUser = new EventEmitter<number>()
+  @Output() deleteComment = new EventEmitter<number>()
+  @Output() addComment = new EventEmitter<Comment>()
 
   ngOnInit(): void {
+    console.log(this.comments)
     this.firstLayerComments = this.filterComments
     this.selectedCommentSub = this.commentService.selectedCommentId$.subscribe(selectedId => this.selectedCommentId = selectedId)
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.firstLayerComments = this.filterComments
+  ngOnDestroy(): void {
+    this.selectedCommentSub.unsubscribe()
   }
 
   onSelectComment(commentId: number | null): void {
