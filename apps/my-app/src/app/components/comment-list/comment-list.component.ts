@@ -16,9 +16,7 @@ export class CommentListComponent implements OnInit , OnDestroy {
   @Input() comments!: Comment[]
   @Input() loggedInUser!: User
 
-  firstLayerComments!: Comment[]
   selectedCommentId!: (number | null)
-
   selectedCommentSub!: Subscription
 
   @Output() deleteUser = new EventEmitter<number>()
@@ -27,7 +25,6 @@ export class CommentListComponent implements OnInit , OnDestroy {
 
   ngOnInit(): void {
     console.log(this.comments)
-    this.firstLayerComments = this.filterComments
     this.selectedCommentSub = this.commentService.selectedCommentId$.subscribe(selectedId => this.selectedCommentId = selectedId)
   }
 

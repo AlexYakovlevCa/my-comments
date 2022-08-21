@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Subject } from 'rxjs'
+import { BehaviorSubject, distinctUntilChanged, Subject } from 'rxjs'
 import { Comment } from '../../models/interfaces'
 import baseComments from '../../../assets/user-data/comments.json'
-import { UsersService } from '../users/users.service'
 import { UserMsgService } from '../msg/user-msg.service'
 
 
